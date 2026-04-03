@@ -1,56 +1,70 @@
-# Multi-Source Data Integration & AI-Ready Pipeline
+# AI-Powered Multi-Source Data Analyzer
 
 ## Overview
-This project builds a unified profile dataset for 10 public figures by integrating data from multiple public sources, including Wikipedia, YouTube, Twitter/X, Instagram, TikTok, and Google Knowledge Graph.
+This project integrates public profile data from multiple sources and adds an LLM layer to generate structured insights.
 
-The goal was to collect, standardize, validate, and combine cross-platform information into a structured dataset suitable for downstream analysis and AI-ready workflows.
+The current AI-ready version uses:
+- Wikipedia / Wikidata
+- YouTube Data API
+- Instagram data collected via Apify
+- Google Knowledge Graph
 
-## Features
-- Multi-source API and web data integration
-- Unified schema design across platforms
-- Data cleaning and validation
-- Handling missing fields and inconsistent formats
-- Cross-platform identity matching
-- Structured output in CSV / dataframe format
+It then transforms the unified dataset into business-style outputs such as:
+- profile summaries
+- key strengths
+- potential risks
+- data observations
 
-## Data Sources
-- Wikipedia / Wikidata API
-- YouTube Data API v3
-- Twitter/X API
-- Apify-based scraping for Instagram
-- Apify-based scraping for TikTok
-- Google Knowledge Graph Search API
+## Project Structure
+```text
+multi-source-ai-analyzer/
+│── data/
+│   ├── DatasetOfUnifiedProfiles.csv
+│   ├── llm_profile_insights.csv
+│
+│── notebooks/
+│   ├── data_collection.ipynb
+│   ├── data_processing.ipynb
+│   ├── llm_analysis.ipynb
+│
+│── src/
+│   ├── data_pipeline.py
+│   ├── llm_module.py
+│
+│── main.py
+│── requirements.txt
+│── .env.example
+│── README.md
+```
 
-## Project Workflow
-1. Identify retrievable fields from each source
-2. Design a unified data schema
-3. Extract data using APIs or controlled scraping
-4. Clean and standardize inconsistent values
-5. Resolve missing fields and platform-specific differences
-6. Combine records into a final unified dataset
+## What Each File Does
+- `src/data_pipeline.py`: loads the dataset, handles missing values, and builds clean LLM payloads
+- `src/llm_module.py`: sends profile payloads to the OpenAI API and returns structured JSON
+- `main.py`: runs the workflow end to end and saves the AI-generated output to CSV
 
-## Tech Stack
-- Python
-- pandas
-- requests
-- Jupyter Notebook
-- API integration
-- Web scraping tools
-
-## Example Use Cases
-- Cross-platform profile comparison
-- Data validation across public sources
-- Building AI-ready structured datasets
-- Supporting downstream analytics and NLP workflows
-
-## Repository Contents
-- `API_Data Integration_Project.ipynb` — main notebook
-- `DatasetOfUnifiedProfiles.csv` — final unified dataset
-- `API_Data Integration_Project Report.docx` — project report
-- `README.md` — project documentation
-
-## Setup
-Clone the repository and install dependencies:
-
+## How to Run
+1. Install dependencies:
 ```bash
-pip install pandas requests python-dotenv
+pip install -r requirements.txt
+```
+
+2. Set your API key:
+```bash
+export OPENAI_API_KEY="your_key_here"
+```
+
+On Windows PowerShell:
+```powershell
+$env:OPENAI_API_KEY="your_key_here"
+```
+
+3. Run the app:
+```bash
+python main.py
+```
+
+## Why This Structure
+This split makes the project easier to maintain and easier to explain in interviews:
+- data prep is separate from AI logic
+- the LLM module can be replaced or upgraded later
+- `main.py` stays clean and focused on workflow orchestration
